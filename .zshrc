@@ -130,7 +130,7 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="/usr/local/opt/mosquitto/bin:$PATH"
 
 # bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+[ -s "/home/andrei/.bun/_bun" ] && source "/home/andrei/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -153,3 +153,7 @@ fi
 
 # Edit .zshrc and add this line
 export PATH=$HOME/.config/rofi/scripts:$PATH
+export PATH=$HOME/.cargo/bin:$PATH
+alias rust-repl=evcxr
+export PATH="$HOME/.dotnet/tools:$PATH"
+

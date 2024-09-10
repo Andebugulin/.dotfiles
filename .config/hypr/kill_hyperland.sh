@@ -1,6 +1,4 @@
 #!/bin/bash
-
-
 # Wait for 10 seconds
 sleep 10
 # Logout command. This is just a placeholder, you'll need to replace it

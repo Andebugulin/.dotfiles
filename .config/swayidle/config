@@ -1,3 +1,3 @@
-timeout 300 'swaylock  -f --image "~/Downloads/wallpapers/cool_girl_lemonade.png" --clock --indicator --indicator-radius 100 --indicator-thickness 7 --ring-color e67300 --key-hl-color cc3300 --line-color 00000000 --inside-color 00000088 --separator-color 00000000'
-timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
-before-sleep 'swaylock  -f --image "~/Downloads/wallpapers/cool_girl_lemonade.png" --clock --indicator --indicator-radius 100 --indicator-thickness 7 --ring-color e67300 --key-hl-color cc3300 --line-color 00000000 --inside-color 00000088 --separator-color 00000000'
+timeout 300 'swaylock  -f --image "~/Downloads/wallpapers/star_wars.png" --clock --indicator --indicator-radius 100 --indicator-thickness 7 --ring-color aa0000 --key-hl-color ff0000 --line-color 00000000 --inside-color 00000088 --separator-color 00000000'
+timeout 900 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
+before-sleep 'swaylock  -f --image "~/Downloads/wallpapers/star_wars.png" --clock --indicator --indicator-radius 100 --indicator-thickness 7 --ring-color aa0000 --key-hl-color ff0000 --line-color 00000000 --inside-color 00000088 --separator-color 00000000'

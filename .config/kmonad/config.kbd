@@ -5,6 +5,7 @@
 (defalias
   sym (tap-next esc (layer-toggle syms))
   k M-S-A-k
+  h M-S-A-h
   j M-S-A-j
   l M-S-A-l
   i M-S-A-i 
@@ -57,16 +58,17 @@
 (deflayer cursor
   A-esc   A-f1   A-f2   A-f3   A-f4   A-f5   A-f6   A-f7   A-f8   A-f9   A-f10  A-f11   A-f12    A-pause  A-prnt  A-ins  A-del
   A-`     A-1    A-2    A-3    A-4    A-5    A-6    A-7    A-8    A-9    A-0    A--     A-=      A-bspc                      A-home
-  A-tab   A-q    A-w    A-e    A-r    A-t    A-y    A-u    up     A-o    A-p    A-[     A-]      A-ret                       A-pgup
-  A-caps  A-a    A-s    A-d    A-f    A-g    A-h    left   down   rght   A-;    A-'     A-\                                A-pgdn
+  A-tab   A-q    A-w    A-e    A-r    A-t    A-y    A-u    A-i    A-o    A-p    A-[     A-]      A-ret                       A-pgup
+  A-caps  A-a    A-s    A-d    A-f    A-g    left   down   up     rght   A-;    A-'     A-\                                A-pgdn
   A-lsft  A-z    A-x    A-c    A-v    A-b    A-n    A-m    A-,    A-.    A-/    A-rsft             A-up                      A-end
   A-lctl  A-lmet lalt        A-spc           A-ralt A-cmps A-rctl                         A-left   A-down   A-rght
   )
+  
 (deflayer syms
   _     _    _    _    _    _    _    _    _    _    _   _   _   _   _     _    _
   _     @1   @2   @3   @4   @5   @6   @7   @8   @9   _   _   _   _              _
   _     @q   _    _    @r   @t   _    @u   @i   _    @p  _   _   _              _
-  _     _    _    @d   @f   @g   _    @j   @k   @l   _   _   _                  _
+  _     _    _    @d   @f   @g   @h   @j   @k   @l   _   _   _                  _
   _     @z   _    @c   _    @b   _    @m   _    _    _   _       _              _
   _     _    _         _         _    _    _                 _   _   _
   )
