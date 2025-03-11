@@ -1,15 +1,25 @@
 #!/bin/bash
+# Script to check bluetooth connection status and show connected device
 
-# Check if Bluetooth is powered
-powered=$(bluetoothctl show | grep "Powered: yes" | wc -l)
-
-# Check if there are any connected devices
-connected=$(bluetoothctl info | grep "Connected: yes" | wc -l)
-
-if [ "$powered" -eq 0 ]; then
-    echo "" # Bluetooth off icon
-elif [ "$connected" -eq 0 ]; then
-    echo "" # Bluetooth on but not connected icon
+# Check if bluetooth is powered on
+if bluetoothctl show | grep -q "Powered: yes"; then
+    # Check for connected devices
+    if bluetoothctl devices Connected | grep -q "Device"; then
+        # Get the name of the connected device
+        device_name=$(bluetoothctl devices Connected | head -n 1 | cut -d ' ' -f 3-)
+        # Check if it's likely headphones/audio device
+        if echo "$device_name" | grep -iq -e "headphone" -e "buds" -e "airpods" -e "earphone" -e "audio"; then
+            # It's headphones
+            echo "{\"text\": \"󰋋 $device_name\", \"class\": \"connected\", \"tooltip\": \"Connected to $device_name\"}"
+        else
+            # Other bluetooth device
+            echo "{\"text\": \"󰂱 $device_name\", \"class\": \"connected\", \"tooltip\": \"Connected to $device_name\"}"
+        fi
+    else
+        # Bluetooth on but not connected
+        echo "{\"text\": \"󰂯\", \"class\": \"disconnected\", \"tooltip\": \"Bluetooth On\"}"
+    fi
 else
-    echo "" # Bluetooth connected icon
+    # Bluetooth powered off
+    echo "{\"text\": \"󰂲\", \"class\": \"off\", \"tooltip\": \"Bluetooth Off\"}"
 fi

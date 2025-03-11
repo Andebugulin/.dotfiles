@@ -35,7 +35,10 @@
   
   "custom/cava-internal": {
     "exec": "~/.config/waybar/cava-visualizer.sh",
-    "tooltip": false
+    "format": "{}",
+    "return-type": "json",
+    "tooltip": false,
+    "interval": 1
   },
   
   "custom/spotify": {
@@ -46,7 +49,8 @@
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous",
     "max-length": 30,
-    "escape": true
+    "escape": true,
+    "interval": 1
   },
   
   "hyprland/workspaces": {
@@ -163,10 +167,11 @@
   },
   
   "custom/bluetooth": {
-    "format": "󰂯",
+    "format": "{}",
     "exec": "~/.config/waybar/scripts/bluetooth-status.sh",
+    "return-type": "json",
     "on-click": "blueman-manager",
-    "interval": 5
+    "interval": 2
   },
   
   "tray": {

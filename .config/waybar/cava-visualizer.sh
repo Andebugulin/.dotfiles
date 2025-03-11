@@ -3,8 +3,14 @@
 
 # First, ensure cava is installed
 if ! command -v cava &> /dev/null; then
-    echo "󰋎"; # Display music icon if cava not found
+    echo "{\"text\": \"󰋎\", \"tooltip\": \"Cava not installed\"}"
     exit 1
+fi
+
+# Check if audio is playing
+if ! pactl list sinks | grep -q "RUNNING"; then
+    echo "{\"text\": \"\", \"tooltip\": \"No audio playing\"}"
+    exit 0
 fi
 
 # Configuration
@@ -33,43 +39,32 @@ bar_delimiter = ""
 EOF
 
 # Run cava with our config and format the output
-cava -p "$temp_config" | while read -r line; do
-    output=""
-    for bar in $line; do
-        # Convert bar value to character
-        index=$((bar-1))
-        if [[ $index -lt 0 ]]; then
-            index=0
-        fi
-        if [[ $index -ge ${#char_set[@]} ]]; then
-            index=$((${#char_set[@]}-1))
-        fi
-        
-        # Add color based on height
-        if [[ $index -lt 2 ]]; then
-            color="#89b4fa" # Blue for low
-        elif [[ $index -lt 4 ]]; then
-            color="#a6e3a1" # Green for medium
-        elif [[ $index -lt 6 ]]; then
-            color="#f9e2af" # Yellow for high
-        else
-            color="#f38ba8" # Red for very high
-        fi
-        
-        # Add the character with color
-        output+="<span color='$color'>${char_set[$index]}</span>"
-    done
-    
-    # If no music is playing, show a simple icon
-    if [[ $(echo "$output" | tr -d '[:space:]<>spancolor=') == "" ]]; then
-        echo "󰎆"
-    else
-        # Add some styling
-        echo "<span font='monospace'>$output</span>"
-    fi
-    
-    sleep "$update_interval"
-done
+output=$(cava -p "$temp_config" 2>/dev/null | head -n 1)
 
 # Clean up
 rm "$temp_config"
+
+# If no music is playing or output is empty, show a simple icon
+if [[ -z "$output" ]]; then
+    echo "{\"text\": \"\", \"tooltip\": \"No audio playing\"}"
+    exit 0
+fi
+
+# Format the output
+formatted_output=""
+for bar in $output; do
+    # Convert bar value to character
+    index=$((bar-1))
+    if [[ $index -lt 0 ]]; then
+        index=0
+    fi
+    if [[ $index -ge ${#char_set[@]} ]]; then
+        index=$((${#char_set[@]}-1))
+    fi
+    
+    # Add the character
+    formatted_output+="${char_set[$index]}"
+done
+
+# Return JSON for waybar
+echo "{\"text\": \"$formatted_output\", \"tooltip\": \"Audio Visualizer\"}"
