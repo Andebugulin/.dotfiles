@@ -10,7 +10,6 @@
   "modules-left": [
     "custom/launcher",
     "custom/spotify",
-    "custom/cava-internal",
     "custom/bluetooth",
     "pulseaudio"
   ],
@@ -37,8 +36,9 @@
     "exec": "~/.config/waybar/cava-visualizer.sh",
     "format": "{}",
     "return-type": "json",
-    "tooltip": false,
-    "interval": 1
+    "tooltip": true,
+    "interval": 1,
+    "exec-on-event": false
   },
   
   "custom/spotify": {

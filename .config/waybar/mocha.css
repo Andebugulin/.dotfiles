@@ -231,3 +231,33 @@ tooltip label {
   background: @surface1;
   transition: all 0.3s ease;
 }
+
+
+#custom-cava-internal.playing {
+  color: @mauve;
+  background: @surface0;
+  padding: 0 10px;
+  border-radius: 14px;
+  margin: 3px 0;
+  margin-left: 3px;
+  font-family: monospace;
+}
+
+#custom-cava-internal.no-audio {
+  color: @subtext0;
+  background: @surface0;
+  padding: 0 10px;
+  border-radius: 14px;
+  margin: 3px 0;
+  margin-left: 3px;
+  font-family: monospace;
+}
+
+#custom-cava-internal.no-cava {
+  color: @yellow;
+  background: @surface0;
+  padding: 0 10px;
+  border-radius: 14px;
+  margin: 3px 0;
+  margin-left: 3px;
+}
