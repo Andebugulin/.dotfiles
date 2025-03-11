@@ -1,0 +1,171 @@
+@import "./waybar/themes/mocha.css";
+
+/* Global */
+* {
+  font-family: "FiraCode Nerd Font", "Font Awesome 6 Free-Solid-900.otf", "Font Awesome 6 Free-Regular-400.otf";
+  font-size: .9rem;
+  border-radius: 1rem;
+  transition-property: background-color, color;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in-out;
+  background-color: shade(@base, 0.9);
+}
+
+@keyframes blink_red {
+  to {
+    background-color: @red;
+    color: @base;
+  }
+}
+
+.warning, .critical, .urgent {
+  animation-name: blink_red;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+#mode, #clock, #memory, #temperature, #cpu, #custom-weather,
+#mpd, #idle_inhibitor, #backlight, #pulseaudio, #network, 
+#battery, #custom-powermenu, #custom-cava-internal,
+#custom-launcher, #tray, #disk, #custom-pacman, #custom-scratchpad-indicator, #custom-bluetooth {
+  padding-left: .6rem;
+  padding-right: .6rem;
+}
+
+/* Bar */
+window#waybar {
+  background-color: transparent;
+}
+
+window > box {
+  background-color: transparent;
+  margin: .3rem;
+  margin-bottom: 0;
+}
+
+/* Custom Bluetooth Styling */
+#custom-bluetooth {
+ color: #769ed3; /* Ensures it uses the global text color setting */
+margin-right: .3rem;}
+
+
+
+#custom-bluetooth:hover {
+  background-color: shade(@base, 0.8); /* Example hover effect */
+}
+
+
+/* Add a subtle pulse animation for when Bluetooth is connected */
+@keyframes bluetooth-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+#custom-bluetooth.connected {
+  animation: bluetooth-pulse 2s infinite ease-in-out;
+}
+
+
+/* Workspaces */
+#workspaces:hover {
+  background-color: @green;
+}
+
+#workspaces button {
+  color: #7977f0;
+}
+
+#workspaces button.focused {
+  color: @blue;
+}
+
+
+
+/* Tooltip */
+tooltip {
+  background-color: @base;
+}
+
+tooltip label {
+  color: @rosewater;
+}
+
+/* battery */
+#battery {
+  color: #d8cb12; /* Mauve */
+}
+#battery.full {
+  color: #0c7011; /* Green */
+}
+#battery.charging {
+  animation: none; /* Stop any animation */
+  color: #dfc117; /* Dark Cyan */
+}
+#battery.discharging {
+  color: #c26868; /* Light Salmon */
+}
+#battery.critical:not(.charging) {
+  color: #8a2446; /* Pink */
+}
+#custom-powermenu {
+  color: @red;
+}
+
+/* mpd */
+#mpd.paused {
+  color: #ff4081; /* Pink */
+  font-style: italic;
+}
+#mpd.stopped {
+  color: #ffeb3b; /* Yellow */
+}
+#mpd {
+  color: #e1bee7; /* Lavender */
+}
+/* Extra */
+#custom-cava-internal {
+  color: #ffab91; /* Light Salmon */
+  padding-right: 1rem;
+}
+#custom-launcher {
+  color: #ffff00; /* Yellow */
+}
+#memory {
+  color: #3089d1; /* Blue */
+}
+#cpu {
+  color: #4caf50; /* Green */
+}
+#clock {
+  color: #c7bb55; /* Yellow */
+}
+#idle_inhibitor {
+  color: #4caf50; /* Green */
+}
+#temperature {
+  color: #1565c0; /* Dark Blue */
+}
+#pulseaudio {
+  color: #9575cd; /* Mauve */
+}
+#network {
+  color: #7977f0; /* Pink */
+}
+#network.disconnected {
+  color: #a82222; /* Black */
+}
+#disk {
+  color: #5e7ab8; /* Green */
+}
+#custom-pacman {
+  color: #3482a1; /* Sky Blue */
+}
+#custom-scratchpad-indicator {
+  color: #ffff00; /* Yellow */
+}
+#custom-weather {
+  color: #e6d3d3; /* Red */
+}

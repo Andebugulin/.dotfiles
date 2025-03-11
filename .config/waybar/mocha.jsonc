@@ -1,171 +1,182 @@
 {
+  "layer": "top",
+  "position": "top",
+  "height": 40,
+  "margin-top": 5,
+  "margin-left": 10,
+  "margin-right": 10,
+  "spacing": 8,
+  
   "modules-left": [
-    "hyprland/workspaces",
-    "pulseaudio",
+    "custom/launcher",
+    "custom/spotify",
     "custom/cava-internal",
-    "sway/mode",
-    "custom/bluetooth"
+    "custom/bluetooth",
+    "pulseaudio"
   ],
-  "sway/mode": {
-    "format": "{}"
-  },
-  "modules-center": ["custom/weather", "clock"],
+  
+  "modules-center": ["clock"],
+  
   "modules-right": [
-    "disk",
+    "network",
     "memory",
     "cpu",
-    "network",
+    "disk",
     "battery",
-    // "custom/recording",
+    "tray",
     "custom/powermenu"
   ],
+  
   "custom/launcher": {
-    "format": "",
+    "format": "󰣇",
     "on-click": "rofi -show drun -I",
-    "tooltip-format": "sudo pacman -Q linux",
     "tooltip": false
   },
+  
   "custom/cava-internal": {
-    "exec": "~/.config/waybar/Cava.sh",
+    "exec": "~/.config/waybar/cava-visualizer.sh",
     "tooltip": false
   },
+  
+  "custom/spotify": {
+    "exec": "~/.config/waybar/scripts/mediaplayer.sh",
+    "format": "{}",
+    "return-type": "json",
+    "on-click": "playerctl play-pause",
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous",
+    "max-length": 30,
+    "escape": true
+  },
+  
   "hyprland/workspaces": {
-    "disable-scroll": true,
-    /* "all-outputs": true, */
-    "active-only": true,
+    "active-only": false,
+    "all-outputs": true,
     "format": "{icon}",
+    "show-special": false,
+    "on-click": "activate",
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    },
     "format-icons": {
-      "1": " 1",
-      "2": " 2",
-      "3": " 3",
-      "4": " 4",
-      "5": " 5",
-      "6": " 6",
-      "7": " 7",
-      "8": " 8",
-      "9": " 9",
-      "10": " 10",
-      "urgent": "",
-      "focused": "",
-      "default": ""
+      "1": "󰎤",
+      "2": "󰎧",
+      "3": "󰎪",
+      "4": "󰎭",
+      "5": "󰎱",
+      "urgent": "󰎣",
+      "focused": "󰮯",
+      "default": "󰒕"
     }
   },
-  "disk": {
-    "interval": 60,
-    "format": " {used}",
-    "path": "/home",
-    "tooltip": true,
-    "tooltip-format": "{used}/{total} => {path} {percentage_used}%"
-  },
-  "pulseaudio": {
-    "scroll-step": 1,
-    "format": "{icon}   {volume}%",
-    "format-muted": "",
-    "format-icons": {
-      "default": ["", "", ""]
-    },
-    /* "states": { */
-    /*   "warning": 100, */
-    /* }, */
-    "scroll-step": 1,
-    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "tooltip": false
-  },
-  "battery": {
-    "interval": 10,
-    "states": {
-      "warning": 20,
-      "critical": 10
-    },
-    "format": "  {capacity}%",
-    "format-full": "    {capacity}%",
-    "format-charging": "  {capacity}%",
-    "tooltip": true
-  },
+  
   "clock": {
-    "on-click-right": "~/.config/waybar/wallpaper_random.sh &",
-    "interval": 1,
-    "format": " {:%I:%M %p      %b %d}",
-    "tooltip": true,
-    "tooltip-format": "{:%A, %d %B %Y}\n<tt>{calendar}</tt>"
+    "format": "{:%H:%M}",
+    "format-alt": "{:%A, %B %d, %Y}",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 3,
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "days": "<span color='#ecc6d9'>{}</span>",
+        "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+        "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+        "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
+      }
+    },
+    "actions": {
+      "on-click-right": "mode",
+      "on-click-forward": "tz_up",
+      "on-click-backward": "tz_down",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    },
+    "interval": 1
   },
-  "memory": {
-    "on-click": "kitty htop",
-    "interval": 1,
-    "format": "  {percentage}%",
-    "states": {
-      "warning": 85
-    }
-  },
-  "cpu": {
-    "interval": 1,
-    "format": "  {usage}%",
-    "on-click": "kitty htop"
-  },
-  "mpd": {
-    "max-length": 25,
-    "format": "meaw {title}",
-    "format-paused": " {title}",
-    "format-stopped": "<span foreground='#bb9af7'></span>",
-    "format-disconnected": " meaw",
-    "on-click": "mpc --quiet toggle",
-    "on-click-right": "mpc ls | mpc add",
-    "on-click-middle": "kitty ncmpcpp",
-    "on-scroll-up": "mpc --quiet prev",
-    "on-scroll-down": "mpc --quiet next",
-    "smooth-scrolling-threshold": 5,
-    "tooltip-format": "{title} - {artist} ({elapsedTime:%M:%S}/{totalTime:%H:%M:%S})"
-  },
-  "network": {
-    "interval": 1,
-    "format-wifi": " {essid}",
-    "format-ethernet": " {ifname} ({ipaddr})",
-    "format-linked": " {essid} (No IP)",
-    "format-disconnected": " Disconnected",
-    "tooltip": false,
-    "on-click": "kitty"
-  },
-  "custom/powermenu": {
-    "format": "",
-    "on-click": "swaylock  -f --image \"~/Downloads/wallpapers/cool_girl_lemonade.png\" --clock --indicator --indicator-radius 100 --indicator-thickness 7 --ring-color e67300 --key-hl-color cc3300 --line-color 00000000 --inside-color 00000088 --separator-color 00000000",
+  
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰖁 Muted",
+    "format-icons": {
+      "default": ["󰕿", "󰖀", "󰕾"]
+    },
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "on-click-right": "pavucontrol",
     "tooltip": false
   },
-  "tray": {
-    "icon-size": 15,
-    "spacing": 5
+  
+  "network": {
+    "interval": 5,
+    "format-wifi": "󰖩 {essid}",
+    "format-ethernet": "󰈀 Connected",
+    "format-disconnected": "󰖪 Disconnected",
+    "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+    "on-click": "nm-connection-editor"
   },
-  "custom/scratchpad-indicator": {
-    "interval": 3,
-    "return-type": "json",
-    // "exec": "hyprctl -t get_tree | jq --unbuffered --compact-output '(recurse(.nodes[]) | select(.name == \"__i3_scratch\") | .focus) as $scratch_ids | [..  | (.nodes? + .floating_nodes?) // empty | .[] | select(.id |IN($scratch_ids[]))] as $scratch_nodes | if ($scratch_nodes|length) > 0 then { text: \"\\($scratch_nodes | length)\", tooltip: $scratch_nodes | map(\"\\(.app_id // .window_properties.class) (\\(.id)): \\(.name)\") | join(\"\\n\") } else empty end'",
-    "format": " {}",
-    "on-click": "exec hyprctl 'scratchpad show'",
-    "on-click-right": "exec hyprctl 'move scratchpad'"
-  },
-  "custom/weather": {
-    "format": "{}",
+  
+  "memory": {
+    "interval": 5,
+    "format": "󰍛 {}%",
     "tooltip": true,
-    "interval": 3600,
-    "exec": "~/.config/waybar/wabar-wttr.py",
-    "return-type": "json"
+    "tooltip-format": "Used: {used:0.1f}GB / {total:0.1f}GB",
+    "states": {
+      "warning": 70,
+      "critical": 90
+    }
   },
-  "custom/recording": {
-    "exec": "$XDG_CONFIG_HOME/waybar/scripts/recording.sh status",
-    "format": "{}",
-    "on-click": "$XDG_CONFIG_HOME/waybar/scripts/recording.sh toggle fullscreen",
-    "on-click-right": "$XDG_CONFIG_HOME/waybar/scripts/recording.sh toggle region",
-    "restart-interval": 1,
-    "return-type": "json",
-    "tooltip": true
+  
+  "cpu": {
+    "interval": 5,
+    "format": "󰻠 {usage}%",
+    "tooltip": true,
+    "states": {
+      "warning": 70,
+      "critical": 90
+    }
   },
-  "hyprland/language": {
-    "format": "{}",
-    "on-click": "hyprctl input type:keyboard xkb_switch_layout next"
+  
+  "disk": {
+    "interval": 30,
+    "format": "󰋊 {percentage_used}%",
+    "path": "/home",
+    "tooltip-format": "{used} used out of {total} on {path} ({percentage_used}%)"
   },
+  
+  "battery": {
+    "bat": "BAT0",
+    "interval": 30,
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰚥 {capacity}%",
+    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+  },
+  
   "custom/bluetooth": {
+    "format": "󰂯",
     "exec": "~/.config/waybar/scripts/bluetooth-status.sh",
-    "interval": 10,
-    "tooltip": "Your Bluetooth details here...",
-    "on-click": "blueman-manager"
+    "on-click": "blueman-manager",
+    "interval": 5
+  },
+  
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
+  },
+  
+  "custom/powermenu": {
+    "format": "󰐥",
+    "on-click": "~/.config/waybar/scripts/powermenu.sh",
+    "tooltip": false
   }
 }
