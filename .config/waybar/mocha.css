@@ -132,6 +132,7 @@ tooltip label {
 }
 
 #pulseaudio,
+#custom-wallpaper,
 #network,
 #memory,
 #cpu,
@@ -260,4 +261,19 @@ tooltip label {
   border-radius: 14px;
   margin: 3px 0;
   margin-left: 3px;
+}
+
+
+#custom-wallpaper:hover {
+  background: @surface1;
+  transition: all 0.3s ease;
+}
+
+#custom-wallpaper {
+  color: @lavender;
+  font-size: 16px;
+}
+
+#custom-wallpaper:hover {
+  color: @blue;
 }

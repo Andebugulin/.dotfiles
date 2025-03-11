@@ -1,11 +1,11 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 40,
-  "margin-top": 5,
+  "height": 36,
+  "margin-top": 1,
   "margin-left": 10,
   "margin-right": 10,
-  "spacing": 8,
+  "spacing": 0,
   
   "modules-left": [
     "custom/launcher",
@@ -17,6 +17,7 @@
   "modules-center": ["clock"],
   
   "modules-right": [
+    "custom/wallpaper",
     "network",
     "memory",
     "cpu",
@@ -32,13 +33,12 @@
     "tooltip": false
   },
   
-  "custom/cava-internal": {
-    "exec": "~/.config/waybar/cava-visualizer.sh",
+  "custom/wallpaper": {
     "format": "{}",
-    "return-type": "json",
-    "tooltip": true,
+    "exec": "~/.config/waybar/scripts/wallpaper-switcher.sh",
+    "on-click": "~/.config/waybar/scripts/wallpaper-switcher.sh click",
     "interval": 1,
-    "exec-on-event": false
+    "return-type": "json"
   },
   
   "custom/spotify": {
@@ -46,8 +46,8 @@
     "format": "{}",
     "return-type": "json",
     "on-click": "playerctl play-pause",
-    "on-scroll-up": "playerctl next",
-    "on-scroll-down": "playerctl previous",
+    "on-scroll-up": "playerctl previous",
+    "on-scroll-down": "playerctl next",
     "max-length": 30,
     "escape": true,
     "interval": 1
