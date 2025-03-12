@@ -4,41 +4,95 @@
 WALLPAPER_DIR="$HOME/Downloads/wallpapers"  # Change this to your wallpaper directory
 CURRENT_WALLPAPER_FILE="$HOME/.config/waybar/current_wallpaper.txt"
 WALLPAPER_LIST="$HOME/.config/waybar/wallpaper_list.txt"
-POSITION_FILE="$HOME/.config/waybar/current_position.txt"
+HISTORY_FILE="$HOME/.config/waybar/wallpaper_history.txt"  # Track previously shown wallpapers
+MAX_HISTORY=10  # Number of wallpapers to avoid repeating
 
-# Create initial wallpaper list if it doesn't exist
-if [ ! -f "$WALLPAPER_LIST" ]; then
-    find "$WALLPAPER_DIR" -type f -name "*.jpg" -o -name "*.png" | sort > "$WALLPAPER_LIST"
+# Function to update the wallpaper list with all current wallpapers
+update_wallpaper_list() {
+    find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.JPG" -o -name "*.png" -o -name "*.PNG" -o -name "*.jpeg" -o -name "*.JPEG" \) | sort > "$WALLPAPER_LIST"
+    # If the list is empty, there might be a problem with the directory
+    if [ ! -s "$WALLPAPER_LIST" ]; then
+        echo "Warning: No wallpapers found in $WALLPAPER_DIR" >&2
+        return 1
+    fi
+    return 0
+}
+
+# Initialize history file if it doesn't exist
+if [ ! -f "$HISTORY_FILE" ]; then
+    touch "$HISTORY_FILE"
 fi
 
-# Initialize position file if it doesn't exist
-if [ ! -f "$POSITION_FILE" ]; then
-    echo "0" > "$POSITION_FILE"
-fi
+# Always update the wallpaper list to include any new images
+update_wallpaper_list
 
-# Create current wallpaper file if it doesn't exist
+# Initialize current wallpaper file if it doesn't exist
 if [ ! -f "$CURRENT_WALLPAPER_FILE" ]; then
     head -n 1 "$WALLPAPER_LIST" > "$CURRENT_WALLPAPER_FILE"
+    echo "$(cat "$CURRENT_WALLPAPER_FILE")" >> "$HISTORY_FILE"
 fi
 
-# Function to shuffle the wallpaper list
-shuffle_wallpapers() {
-    # Make a backup of the original list first (optional)
-    cp "$WALLPAPER_LIST" "${WALLPAPER_LIST}.bak"
+# Function to pick a truly random wallpaper that hasn't been shown recently
+pick_random_wallpaper() {
+    total_wallpapers=$(wc -l < "$WALLPAPER_LIST")
     
-    # Shuffle the list
-    shuf "$WALLPAPER_LIST" > "${WALLPAPER_LIST}.tmp"
-    mv "${WALLPAPER_LIST}.tmp" "$WALLPAPER_LIST"
+    # If we have very few wallpapers, just use standard random selection
+    if [ "$total_wallpapers" -le "$MAX_HISTORY" ]; then
+        random_line=$((RANDOM % total_wallpapers + 1))
+        sed -n "${random_line}p" "$WALLPAPER_LIST"
+        return
+    fi
     
-    # Reset position
-    echo "0" > "$POSITION_FILE"
+    # Try to find a wallpaper that isn't in the recent history
+    local attempts=0
+    local max_attempts=20  # Avoid infinite loops
     
-    # Set current wallpaper to first in list
-    head -n 1 "$WALLPAPER_LIST" > "$CURRENT_WALLPAPER_FILE"
+    while [ "$attempts" -lt "$max_attempts" ]; do
+        random_line=$((RANDOM % total_wallpapers + 1))
+        candidate=$(sed -n "${random_line}p" "$WALLPAPER_LIST")
+        
+        # Check if this wallpaper is in our recent history
+        if ! grep -q "^$candidate$" "$HISTORY_FILE"; then
+            echo "$candidate"
+            return
+        fi
+        
+        attempts=$((attempts + 1))
+    done
+    
+    # If we failed to find a non-recent wallpaper after several attempts,
+    # just return a random one anyway
+    random_line=$((RANDOM % total_wallpapers + 1))
+    sed -n "${random_line}p" "$WALLPAPER_LIST"
+}
+
+# Function to update history of recently shown wallpapers
+update_history() {
+    local wallpaper="$1"
+    
+    # Add the new wallpaper to history
+    echo "$wallpaper" >> "$HISTORY_FILE"
+    
+    # Keep only the most recent MAX_HISTORY entries
+    if [ "$(wc -l < "$HISTORY_FILE")" -gt "$MAX_HISTORY" ]; then
+        tail -n "$MAX_HISTORY" "$HISTORY_FILE" > "${HISTORY_FILE}.tmp"
+        mv "${HISTORY_FILE}.tmp" "$HISTORY_FILE"
+    fi
 }
 
 update_and_show() {
     current=$(cat "$CURRENT_WALLPAPER_FILE")
+    
+    # Check if the current wallpaper file exists
+    if [ ! -f "$current" ]; then
+        echo "Warning: Current wallpaper file doesn't exist: $current" >&2
+        # Use a random wallpaper instead
+        new_wallpaper=$(pick_random_wallpaper)
+        echo "$new_wallpaper" > "$CURRENT_WALLPAPER_FILE"
+        current="$new_wallpaper"
+        update_history "$current"
+    fi
+    
     wallpaper_name=$(basename "$current")
     
     # Apply the wallpaper
@@ -50,57 +104,41 @@ update_and_show() {
 }
 
 # Handle direction argument
-if [ "$1" = "click" ]; then
-    # On click, go to next wallpaper
-    "$0" next
+if [ "$1" = "click" ] || [ "$1" = "next" ]; then
+    # Pick a truly random wallpaper that's not in our recent history
+    new_wallpaper=$(pick_random_wallpaper)
     
-elif [ "$1" = "next" ]; then
-    # Get current position
-    position=$(cat "$POSITION_FILE")
+    # Update current wallpaper
+    echo "$new_wallpaper" > "$CURRENT_WALLPAPER_FILE"
     
-    # Get total number of wallpapers
-    total_wallpapers=$(wc -l < "$WALLPAPER_LIST")
-    
-    # Calculate next position
-    next_position=$((position + 1))
-    
-    # Check if we reached the end of the list
-    if [ "$next_position" -ge "$total_wallpapers" ]; then
-        # Shuffle the list and start from beginning
-        shuffle_wallpapers
-        next_position=0
-    fi
-    
-    # Get the next wallpaper
-    next=$(sed -n "$((next_position + 1))p" "$WALLPAPER_LIST")
-    
-    # Update position and current wallpaper
-    echo "$next_position" > "$POSITION_FILE"
-    echo "$next" > "$CURRENT_WALLPAPER_FILE"
+    # Update history
+    update_history "$new_wallpaper"
     
     update_and_show
     
 elif [ "$1" = "prev" ]; then
-    # Get current position
-    position=$(cat "$POSITION_FILE")
-    
-    # Get total number of wallpapers
-    total_wallpapers=$(wc -l < "$WALLPAPER_LIST")
-    
-    # Calculate previous position
-    prev_position=$((position - 1))
-    
-    # Check if we're at the beginning of the list
-    if [ "$prev_position" -lt 0 ]; then
-        prev_position=$((total_wallpapers - 1))
+    # Get the previous wallpaper from history (second most recent)
+    if [ "$(wc -l < "$HISTORY_FILE")" -gt 1 ]; then
+        prev=$(tail -n 2 "$HISTORY_FILE" | head -n 1)
+        echo "$prev" > "$CURRENT_WALLPAPER_FILE"
+        update_and_show
+    else
+        # Not enough history, just pick a random one
+        new_wallpaper=$(pick_random_wallpaper)
+        echo "$new_wallpaper" > "$CURRENT_WALLPAPER_FILE"
+        update_history "$new_wallpaper"
+        update_and_show
     fi
     
-    # Get the previous wallpaper
-    prev=$(sed -n "$((prev_position + 1))p" "$WALLPAPER_LIST")
+elif [ "$1" = "refresh" ]; then
+    # Completely refresh the wallpaper list and reset
+    update_wallpaper_list
+    new_wallpaper=$(pick_random_wallpaper)
+    echo "$new_wallpaper" > "$CURRENT_WALLPAPER_FILE"
     
-    # Update position and current wallpaper
-    echo "$prev_position" > "$POSITION_FILE"
-    echo "$prev" > "$CURRENT_WALLPAPER_FILE"
+    # Clear history and add this wallpaper
+    > "$HISTORY_FILE"
+    update_history "$new_wallpaper"
     
     update_and_show
     
