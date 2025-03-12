@@ -277,3 +277,26 @@ tooltip label {
 #custom-wallpaper:hover {
   color: @blue;
 }
+
+#custom-vpn {
+  background: @surface0;
+  color: @blue;
+  padding: 0 12px;
+  border-radius: 14px;
+  margin: 3px 0;
+  margin-left: 3px;
+  transition: all 0.3s ease;
+}
+
+#custom-vpn:hover {
+  background: @surface1;
+  transition: all 0.3s ease;
+}
+
+#custom-vpn.connected {
+  color: @green;
+}
+
+#custom-vpn.disconnected {
+  color: @red;
+}
