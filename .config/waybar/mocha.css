@@ -300,3 +300,7 @@ tooltip label {
 #custom-vpn.disconnected {
   color: @red;
 }
+
+#custom-vpn.error {
+  color: @yellow;
+}

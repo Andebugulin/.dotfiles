@@ -15,7 +15,15 @@ if protonvpn status 2>/dev/null | grep -q "Connected"; then
         tooltip="Connected to ProtonVPN"
     fi
     
-    echo '{"text": "󰌾 VPN", "class": "connected", "tooltip": "'"$tooltip"'"}'
+    # Use a filled shield icon for connected state
+    echo '{"text": "󰌾", "class": "connected", "tooltip": "'"$tooltip"'"}'
 else
-    echo '{"text": "󰌿 VPN", "class": "disconnected", "tooltip": "Not connected"}'
+    # Handle the reconnection scenario
+    if protonvpn status 2>/dev/null | grep -q "Could not reach"; then
+        tooltip="Connection issue - try reconnecting"
+        echo '{"text": "󱘖", "class": "error", "tooltip": "'"$tooltip"'"}'
+    else
+        # Standard disconnected state
+        echo '{"text": "󰌿", "class": "disconnected", "tooltip": "Not connected"}'
+    fi
 fi

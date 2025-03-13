@@ -60,8 +60,9 @@
     "return-type": "json",
     "on-click": "~/.config/waybar/scripts/vpn-toggle.sh",
     "interval": 1,
-    "tooltip": true
-  },
+    "tooltip": true,
+    "signal": 8  // You can use this to manually update the module
+},
   
   "hyprland/workspaces": {
     "active-only": false,
