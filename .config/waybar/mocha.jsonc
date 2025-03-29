@@ -7,25 +7,24 @@
   "margin-right": 10,
   "spacing": 0,
   
-  "modules-left": [
-    "custom/launcher",
-    "custom/vpn",
-    "custom/spotify",
-    "custom/bluetooth",
-    "pulseaudio"
-  ],
+
+"modules-left": [
+  "custom/vpn",
+  "custom/spotify",
+  "custom/bluetooth",
+  "pulseaudio",
+  "custom/wallpaper"
+],
   
   "modules-center": ["clock"],
   
   "modules-right": [
-    "custom/wallpaper",
     "network",
     "memory",
     "cpu",
     "disk",
     "battery",
-    "tray",
-    "custom/powermenu"
+    "tray"
   ],
   
   "custom/launcher": {
@@ -64,30 +63,39 @@
     "signal": 8  // You can use this to manually update the module
 },
   
-  "hyprland/workspaces": {
-    "active-only": false,
-    "all-outputs": true,
-    "format": "{icon}",
-    "show-special": false,
-    "on-click": "activate",
-    "persistent-workspaces": {
-      "1": [],
-      "2": [],
-      "3": [],
-      "4": [],
-      "5": []
-    },
-    "format-icons": {
-      "1": "󰎤",
-      "2": "󰎧",
-      "3": "󰎪",
-      "4": "󰎭",
-      "5": "󰎱",
-      "urgent": "󰎣",
-      "focused": "󰮯",
-      "default": "󰒕"
-    }
+
+"hyprland/workspaces": {
+  "format": "{icon}",
+  "on-click": "activate",
+  "all-outputs": true,
+  "format-icons": {
+    "active": "󰮯",
+    "default": "󰒕",
+    "urgent": "󰀨",
+    "empty": "󰧵"
   },
+  "persistent_workspaces": {
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": []
+  }
+},
+
+"custom/workspace-apps": {
+  "exec": "~/.config/waybar/scripts/workspace-app-icons.sh",
+  "return-type": "json",
+  "interval": 1,
+  "format": "{}",
+  "tooltip": false
+},
+
+"hyprland/window": {
+  "format": "{}",
+  "separate-outputs": true,
+  "max-length": 25
+},
   
   "clock": {
     "format": "{:%H:%M}",

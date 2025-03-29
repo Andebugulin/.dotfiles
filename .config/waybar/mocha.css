@@ -55,34 +55,58 @@ tooltip label {
   padding: 5px;
 }
 
+/* Workspace module with app icons */
 #workspaces {
   background: @surface0;
   border-radius: 14px;
   margin: 3px 0;
-  padding: 0 8px;
+  margin-left: 3px;
+  padding: 0 10px;
 }
 
 #workspaces button {
   color: @overlay2;
   padding: 0 5px;
   margin: 3px 2px;
-  border-radius: 14px;
+  border-radius: 10px;
   background: transparent;
   transition: all 0.3s ease;
+  font-size: 15px;
 }
 
 #workspaces button.active {
   color: @mauve;
   background: @surface1;
-  padding: 0 10px;
-  transition: all 0.3s ease;
+  padding: 0 8px;
+  transition: all 0.2s ease;
 }
 
 #workspaces button:hover {
   background: @surface1;
   color: @lavender;
+  transition: all 0.2s ease;
+}
+
+/* Custom workspace module */
+#custom-workspace-apps {
+  background: @surface0;
+  border-radius: 14px;
+  margin: 3px 0;
+  margin-left: 3px;
   padding: 0 10px;
-  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+/* Empty workspace icon */
+#custom-workspace-apps .empty {
+  color: @overlay0;
+  opacity: 0.7;
+}
+
+/* Active workspace icon */
+#custom-workspace-apps .active {
+  color: @mauve;
+  font-size: 16px;
 }
 
 #custom-launcher {
