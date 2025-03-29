@@ -1,30 +1,79 @@
 # .dotfiles Repository
 
+A collection of configuration files for my Arch Linux + Hyprland setup.
+
 ## Features
 
-- **Hyprland**: Customized bindings and configurations.
-- **Swaylock & Swayidle**: Enhanced security and efficiency.
-- **Waybar**: Customized status bar for essential information.
-- **Kmonad**: Powerful custom keybindings.
-- **code keybindings**: Customized keybindings for Visual Studio Code.
-- **social bash**: Customized bash prompt for social media restriction.
+- **Hyprland**: Customized bindings and tiling window manager configurations.
+- **Swaylock & Swayidle**: Enhanced security and power efficiency.
+- **Waybar**: Customized status bar for essential system information.
+- **Kmonad**: Powerful custom keyboard remapping and keybindings.
+- **VS Code Keybindings**: Customized keybindings for Visual Studio Code.
+- **Social Blocker**: Bash script to restrict social media distractions.
 
-## Getting Started
+## Prerequisites
 
-Clone this repository to explore my configuration, it is made for hyprland arch linux (not tested yet)
+Install the following packages from the Arch repositories and AUR:
 
-Use sync_dotfiles.sh to sync the dotfiles with the repository, they will be copied from .config to your custom directory!
+```bash
+# Core packages
+sudo pacman -S hyprland kitty waybar swayidle swaylock wofi wl-clipboard git
+
+mkdir Downloads
+cd Downloads
+git clone https://aur.archlinux.org/yay.git
+cd yay 
+makepkg -si
+
+# AUR packages (using yay)
+yay -S kmonad visual-studio-code-bin
+```
+
+## Installation
+
+1. Clone this repository:
+   ```bash
+   mkdir ~/vscoding
+   git clone https://github.com/andebugulin/.dotfiles.git ~/vscoding/.dotfiles
+   cd ~/vscoding/.dotfiles
+   ```
+
+2. Make the restoration script executable:
+   ```bash
+   chmod +x restore_dotfiles.sh
+   ```
+
+3. Run the restoration script to install the configurations:
+   ```bash
+   ./restore_dotfiles.sh
+   ```
+
+## Backup Your Changes
+
+When you make changes to your configurations, use the sync script to back them up:
+
+```bash
+./sync_dotfiles.sh
+```
+
+## Customization
+
+Feel free to modify any of the configuration files to suit your needs. The main configuration files are located in the `.config` directory.
 
 ## Contributions
 
-Welcome! Open pull requests for suggestions and enhancements.
+Contributions and suggestions are welcome! Please feel free to open pull requests for enhancements.
+
+## Troubleshooting
+
+- If you encounter permission issues, make sure the scripts are executable with `chmod +x *.sh`
+- Ensure all required packages are installed before running the restoration script
+- Check the paths in the scripts if your directory structure differs from the default
 
 ## Acknowledgements
 
-Thanks to the creators of the tools and software.
+Thanks to the creators of Hyprland, Waybar, Kmonad, and all the other tools that make this configuration possible.
 
 ## License
 
 Licensed under [MIT License](LICENSE).
-
-
