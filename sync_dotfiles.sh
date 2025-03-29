@@ -12,6 +12,8 @@ DIRS_TO_SYNC=(
     "$CONFIG_DIR/kmonad"
     "$CONFIG_DIR/swayidle"
     "$CONFIG_DIR/waybar"
+    "$CONFIG_DIR/archblocker"
+    "$CONFIG_DIR/kitty"
     "$CODE_USER_DIR/keybindings"
 )
 

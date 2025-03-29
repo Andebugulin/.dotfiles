@@ -9,7 +9,9 @@ A collection of configuration files for my Arch Linux + Hyprland setup.
 - **Waybar**: Customized status bar for essential system information.
 - **Kmonad**: Powerful custom keyboard remapping and keybindings.
 - **VS Code Keybindings**: Customized keybindings for Visual Studio Code.
-- **Social Blocker**: Bash script to restrict social media distractions.
+- **archblocker**: A script to edit hosts file for blocking web content, or getting rid of addictions on Arch Linux.
+- **kitty**: Terminal emulator with custom configurations.
+
 
 ## Prerequisites
 
