@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define source and destination directories
-DOTFILES_DIR="/home/andrei/vscoding/.dotfiles/.config"
+DOTFILES_DIR="/home/andrei/Dev/private/dotfiles/.config"
 CONFIG_DIR="/home/andrei/.config"
 CODE_USER_DIR="/home/andrei/.config/Code/User/sync"
 SOCIAL_BLOCKER_FILE="/home/andrei/social-blocker.sh"

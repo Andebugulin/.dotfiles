@@ -7,18 +7,20 @@
   "margin-right": 10,
   "spacing": 0,
   
-
-"modules-left": [
-  "custom/vpn",
-  "custom/spotify",
-  "custom/bluetooth",
-  "pulseaudio",
-  "custom/wallpaper"
-],
+  "modules-left": [
+    "custom/vpn",
+    "custom/spotify",
+    "custom/bluetooth",
+    "pulseaudio",
+    "custom/wallpaper"
+    
+  ],
   
-  "modules-center": ["clock"],
+  "modules-center": ["custom/clock-workspace-toggle"],
   
   "modules-right": [
+    "custom/pomodoro-short",
+    "custom/pomodoro-long",
     "network",
     "memory",
     "cpu",
@@ -31,6 +33,24 @@
     "format": "󰣇",
     "on-click": "rofi -show drun -I",
     "tooltip": false
+  },
+
+  "custom/pomodoro-short": {
+    "format": "{}",
+    "exec": "~/.config/waybar/scripts/pomodoro.sh short",
+    "on-click": "~/.config/waybar/scripts/pomodoro.sh short click",
+    "return-type": "json",
+    "interval": 1,
+    "tooltip": true
+  },
+
+  "custom/pomodoro-long": {
+    "format": "{}",
+    "exec": "~/.config/waybar/scripts/pomodoro.sh long",
+    "on-click": "~/.config/waybar/scripts/pomodoro.sh long click",
+    "return-type": "json",
+    "interval": 1,
+    "tooltip": true
   },
   
   "custom/wallpaper": {
@@ -60,42 +80,50 @@
     "on-click": "~/.config/waybar/scripts/vpn-toggle.sh",
     "interval": 1,
     "tooltip": true,
-    "signal": 8  // You can use this to manually update the module
-},
-  
-
-"hyprland/workspaces": {
-  "format": "{icon}",
-  "on-click": "activate",
-  "all-outputs": true,
-  "format-icons": {
-    "active": "󰮯",
-    "default": "󰒕",
-    "urgent": "󰀨",
-    "empty": "󰧵"
+    "signal": 8
   },
-  "persistent_workspaces": {
-    "1": [],
-    "2": [],
-    "3": [],
-    "4": [],
-    "5": []
-  }
-},
+  
+  "custom/clock-workspace-toggle": {
+    "format": "{}",
+    "exec": "~/.config/waybar/scripts/toggle-clock-workspaces.sh",
+    "on-click": "~/.config/waybar/scripts/toggle-clock-workspaces.sh click",
+    "return-type": "json",
+    "interval": 1,
+    "tooltip": true
+  },
 
-"custom/workspace-apps": {
-  "exec": "~/.config/waybar/scripts/workspace-app-icons.sh",
-  "return-type": "json",
-  "interval": 1,
-  "format": "{}",
-  "tooltip": false
-},
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "all-outputs": true,
+    "format-icons": {
+      "active": "󰮯",
+      "default": "󰒕",
+      "urgent": "󰀨",
+      "empty": "󰧵"
+    },
+    "persistent_workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    }
+  },
 
-"hyprland/window": {
-  "format": "{}",
-  "separate-outputs": true,
-  "max-length": 25
-},
+  "custom/workspace-apps": {
+    "exec": "~/.config/waybar/scripts/workspace-app-icons.sh",
+    "return-type": "json",
+    "interval": 1,
+    "format": "{}",
+    "tooltip": false
+  },
+
+  "hyprland/window": {
+    "format": "{}",
+    "separate-outputs": true,
+    "max-length": 25
+  },
   
   "clock": {
     "format": "{:%H:%M}",

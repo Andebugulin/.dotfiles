@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-WALLPAPER_DIR="$HOME/Downloads/wallpapers"  # Change this to your wallpaper directory
+WALLPAPER_DIR="$HOME/Media/wallpapers"  # Change this to your wallpaper directory
 CURRENT_WALLPAPER_FILE="$HOME/.config/waybar/current_wallpaper.txt"
 WALLPAPER_LIST="$HOME/.config/waybar/wallpaper_list.txt"
 HISTORY_FILE="$HOME/.config/waybar/wallpaper_history.txt"  # Track previously shown wallpapers

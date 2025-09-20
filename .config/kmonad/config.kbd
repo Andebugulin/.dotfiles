@@ -10,6 +10,7 @@
   l M-S-A-l
   i M-S-A-i 
   q M-S-A-q
+  e C-b
   f M-S-A-f
   g M-S-A-g
   r M-S-A-r
@@ -30,12 +31,20 @@
   m M-S-A-m 
   c M-S-A-c 
   z M-S-A-z
+
+
   ) 
+
+(defalias
+  lock (layer-switch locked)
+  unlock (layer-switch base)
+)
   
 
 (defalias
-  lalt (tap-next lalt (layer-toggle cursor))
+  lalt (tap-hold-next-release 200 lalt (layer-toggle cursor))
 )
+
 (defsrc
   esc   f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12    pause  prnt  ins  del
   `     1    2    3    4    5    6    7    8    9    0    -     =      bspc              home
@@ -46,7 +55,7 @@
   )
 
 (deflayer base
-  esc   f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12    pause  prnt  ins  del
+  esc   f1   f2   f3   f4   f5   f6   f7   f8   f9   @lock  f11   f12    pause  prnt  ins  del
   `     1    2    3    4    5    6    7    8    9    0    -     =      bspc              home
   tab   q    w    e    r    t    y    u    i    o    p    [     ]      ret               pgup
   @sym  a    s    d    f    g    h    j    k    l    ;    '     \                        pgdn
@@ -54,6 +63,14 @@
   lctl  lmet @lalt     spc       ralt cmps rctl                 left   down   rght
   )
 
+(deflayer locked
+  _     _    _    _    _    _    _    _    _    _    @unlock    _     _   _  _  _ _ 
+  _     _    _    _    _    _    _    _    _    _    _    _     _      _                _ 
+  _     _    _    _    _    _    _    _    _    _    _    _     _      _                _ 
+  _     _    _    _    _    _    _    _    _    _    _    _     _                       _ 
+  _     _    _    _    _    _    _    _    _    _    _    _            _               _ 
+  _     _    _         _         _    _    _                    _   _  _ 
+)
 
 (deflayer cursor
   A-esc   A-f1   A-f2   A-f3   A-f4   A-f5   A-f6   A-f7   A-f8   A-f9   A-f10  A-f11   A-f12    A-pause  A-prnt  A-ins  A-del
@@ -67,7 +84,7 @@
 (deflayer syms
   _     _    _    _    _    _    _    _    _    _    _   _   _   _   _     _    _
   _     @1   @2   @3   @4   @5   @6   @7   @8   @9   _   _   _   _              _
-  _     @q   _    _    @r   @t   _    @u   @i   _    @p  _   _   _              _
+  _     @q   _    @e   @r   @t   _    @u   @i   _    @p  _   _   _              _
   _     _    _    @d   @f   @g   @h   @j   @k   @l   _   _   _                  _
   _     @z   _    @c   _    @b   _    @m   _    _    _   _       _              _
   _     _    _         _         _    _    _                 _   _   _

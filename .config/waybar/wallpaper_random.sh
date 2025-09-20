@@ -15,5 +15,5 @@ elif [ "$is_swaybg_ServerExist" = "1" ]; then
   killall swaybg
 fi
 
-swaybg -i $(find ~/Downloads/wallpapers/. -type f | shuf -n1) -m fill &
+swaybg -i $(find ~/Media/wallpapers/. -type f | shuf -n1) -m fill &
 

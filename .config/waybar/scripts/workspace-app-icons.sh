@@ -195,7 +195,7 @@ fi
 
 # Initialize arrays for workspace icons
 declare -A workspace_icons
-for i in {1..5}; do
+for i in {1..9}; do
   workspace_icons[$i]="󰧵"  # Default empty icon
 done
 
@@ -205,7 +205,7 @@ echo "$windows_json" > /tmp/hypr_windows.json
 
 # Process windows and collect icons for each workspace
 declare -A workspace_app_icons
-for i in {1..5}; do
+for i in {1..9}; do
   workspace_app_icons[$i]=""
 done
 
@@ -215,8 +215,8 @@ while read -r window; do
   window_class=$(echo "$window" | jq -r '.class')
   window_title=$(echo "$window" | jq -r '.title')
   
-  # Only process valid workspaces (1-5)
-  if [[ "$window_workspace" =~ ^[1-5]$ ]]; then
+  # Only process valid workspaces (1-9)
+  if [[ "$window_workspace" =~ ^[1-9]$ ]]; then
     # Get icon for this window
     app_icon=$(get_icon "$window_class" "$window_title")
     
@@ -228,7 +228,7 @@ while read -r window; do
 done < <(jq -c '.[]' /tmp/hypr_windows.json 2>/dev/null)
 
 # Set workspace icons based on active apps
-for i in {1..5}; do
+for i in {1..9}; do
   if [[ -n "${workspace_app_icons[$i]}" ]]; then
     # Trim trailing space
     workspace_app_icons[$i]="${workspace_app_icons[$i]% }"
@@ -250,7 +250,7 @@ done
 
 # Build workspace display string
 workspace_display=""
-for i in {1..5}; do
+for i in {1..9}; do
   workspace_display="${workspace_display} ${workspace_icons[$i]} "
 done
 

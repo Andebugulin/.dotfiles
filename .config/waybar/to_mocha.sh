@@ -4,7 +4,7 @@ SDIR="$HOME/.config/waybar"
 waybar -c "$SDIR"/mocha.jsonc -s "$SDIR"/mocha.css &
 killall swaybg
 # Directory containing your wallpapers
-WALLPAPERS_DIR=~/Downloads/wallpapers
+WALLPAPERS_DIR=~/Media/wallpapers
 
 # Select a random wallpaper
 WALLPAPER=$(find "$WALLPAPERS_DIR" -type f | shuf -n 1)

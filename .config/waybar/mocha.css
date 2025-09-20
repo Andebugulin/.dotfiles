@@ -328,3 +328,111 @@ tooltip label {
 #custom-vpn.error {
   color: @yellow;
 }
+#custom-clock-workspace-toggle {
+  color: @blue;
+  background: @surface0;
+  margin: 3px 0;
+  padding: 0 14px;
+  border-radius: 14px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+#custom-clock-workspace-toggle:hover {
+  background: @surface1;
+  transition: all 0.3s ease;
+}
+
+#custom-clock-workspace-toggle.clock {
+  color: @blue;
+}
+
+#custom-clock-workspace-toggle.workspace {
+  color: @mauve;
+}
+
+#custom-pomodoro {
+  color: @red;
+  background: @surface0;
+  margin: 3px 0;
+  padding: 0 14px;
+  border-radius: 14px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+#custom-pomodoro:hover {
+  background: @surface1;
+  transition: all 0.3s ease;
+}
+
+#custom-pomodoro.working {
+  color: @red;
+}
+
+#custom-pomodoro.break {
+  color: @green;
+}
+
+#custom-pomodoro.idle {
+  color: @blue;
+}
+
+
+#custom-pomodoro-short {
+  color: @yellow;
+  background: @surface0;
+  margin: 3px 0;
+  padding: 0 14px;
+  border-radius: 14px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+#custom-pomodoro-short:hover {
+  background: @surface1;
+  transition: all 0.3s ease;
+}
+
+#custom-pomodoro-short.working-short {
+  color: @red;
+}
+
+#custom-pomodoro-short.break-short {
+  color: @green;
+}
+
+#custom-pomodoro-short.idle-short {
+  color: @yellow;
+}
+
+#custom-pomodoro-long {
+  color: @peach;
+  background: @surface0;
+  margin: 3px 0;
+  padding: 0 14px;
+  border-radius: 14px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+#custom-pomodoro-long:hover {
+  background: @surface1;
+  transition: all 0.3s ease;
+}
+
+#custom-pomodoro-long.working-long {
+  color: @red;
+}
+
+#custom-pomodoro-long.break-long {
+  color: @green;
+}
+
+#custom-pomodoro-long.idle-long {
+  color: @peach;
+}
