@@ -1,29 +1,36 @@
 #!/bin/bash
 
-# Check if ProtonVPN is connected using the ProtonVPN CLI
-if protonvpn status 2>/dev/null | grep -q "Connected"; then
-    # Get VPN details
-    vpn_status=$(protonvpn status 2>/dev/null)
-    server=$(echo "$vpn_status" | grep "Server:" | cut -d ':' -f2- | xargs)
-    country=$(echo "$vpn_status" | grep "Country:" | cut -d ':' -f2- | xargs)
+# Check Mullvad VPN connection status
+status=$(mullvad status 2>/dev/null)
+
+if echo "$status" | grep -q "Connected"; then
+    # Extract server and location info
+    server=$(echo "$status" | grep -oP '(?<=to )[^ ]+' | head -1)
+    location=$(echo "$status" | grep -oP '(?<=in )[^\n]+' | head -1)
     
-    if [[ -n "$server" && -n "$country" ]]; then
-        tooltip="Connected to $server ($country)"
+    if [[ -n "$location" ]]; then
+        tooltip="Connected to $location"
+        if [[ -n "$server" ]]; then
+            tooltip="$tooltip ($server)"
+        fi
     elif [[ -n "$server" ]]; then
         tooltip="Connected to $server"
     else
-        tooltip="Connected to ProtonVPN"
+        tooltip="Connected to Mullvad VPN"
     fi
     
-    # Use a filled shield icon for connected state
+    # Connected state with filled shield icon
     echo '{"text": "󰌾", "class": "connected", "tooltip": "'"$tooltip"'"}'
+elif echo "$status" | grep -q "Connecting"; then
+    # Connecting state
+    echo '{"text": "󰦞", "class": "connecting", "tooltip": "Connecting to Mullvad VPN..."}'
+elif echo "$status" | grep -q "Disconnecting"; then
+    # Disconnecting state
+    echo '{"text": "󰦞", "class": "disconnecting", "tooltip": "Disconnecting from Mullvad VPN..."}'
+elif echo "$status" | grep -q "Blocked"; then
+    # Kill switch is blocking
+    echo '{"text": "󰌿", "class": "blocked", "tooltip": "Disconnected (Kill switch active)"}'
 else
-    # Handle the reconnection scenario
-    if protonvpn status 2>/dev/null | grep -q "Could not reach"; then
-        tooltip="Connection issue - try reconnecting"
-        echo '{"text": "󱘖", "class": "error", "tooltip": "'"$tooltip"'"}'
-    else
-        # Standard disconnected state
-        echo '{"text": "󰌿", "class": "disconnected", "tooltip": "Not connected"}'
-    fi
+    # Standard disconnected state
+    echo '{"text": "󰌿", "class": "disconnected", "tooltip": "Not connected - Click to connect"}'
 fi
