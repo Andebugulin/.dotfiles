@@ -238,9 +238,15 @@ tooltip label {
 
 /* Animation for critical battery */
 @keyframes battery-blink {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 /* Hover effects for all modules */
@@ -256,7 +262,6 @@ tooltip label {
   background: @surface1;
   transition: all 0.3s ease;
 }
-
 
 #custom-cava-internal.playing {
   color: @mauve;
@@ -286,7 +291,6 @@ tooltip label {
   margin: 3px 0;
   margin-left: 3px;
 }
-
 
 #custom-wallpaper:hover {
   background: @surface1;
@@ -380,7 +384,6 @@ tooltip label {
   color: @blue;
 }
 
-
 #custom-pomodoro-short {
   color: @yellow;
   background: @surface0;
@@ -435,4 +438,28 @@ tooltip label {
 
 #custom-pomodoro-long.idle-long {
   color: @peach;
+}
+
+/* Do Not Disturb toggle module */
+#custom-dunst-toggle {
+  background: @surface0;
+  margin: 3px 0;
+  margin-left: 3px;
+  padding: 0 12px;
+  border-radius: 14px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+#custom-dunst-toggle:hover {
+  background: @surface1;
+  transition: all 0.3s ease;
+}
+
+#custom-dunst-toggle.dnd-on {
+  color: @red;
+}
+
+#custom-dunst-toggle.dnd-off {
+  color: @sky;
 }

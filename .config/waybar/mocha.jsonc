@@ -6,21 +6,21 @@
   "margin-left": 10,
   "margin-right": 10,
   "spacing": 0,
-  
+
   "modules-left": [
     "custom/vpn",
     "custom/spotify",
     "custom/bluetooth",
     "pulseaudio",
     "custom/wallpaper"
-    
   ],
-  
+
   "modules-center": ["custom/clock-workspace-toggle"],
-  
+
   "modules-right": [
     "custom/pomodoro-short",
     "custom/pomodoro-long",
+    "custom/dunst-toggle",
     "network",
     "memory",
     "cpu",
@@ -28,7 +28,7 @@
     "battery",
     "tray"
   ],
-  
+
   "custom/launcher": {
     "format": "󰣇",
     "on-click": "rofi -show drun -I",
@@ -52,7 +52,16 @@
     "interval": 1,
     "tooltip": true
   },
-  
+
+  "custom/dunst-toggle": {
+    "format": "{}",
+    "exec": "~/.config/waybar/scripts/dunst-toggle.sh",
+    "on-click": "~/.config/waybar/scripts/dunst-toggle.sh click",
+    "return-type": "json",
+    "interval": 1,
+    "tooltip": true
+  },
+
   "custom/wallpaper": {
     "format": "{}",
     "exec": "~/.config/waybar/scripts/wallpaper-switcher.sh",
@@ -60,7 +69,7 @@
     "interval": 1,
     "return-type": "json"
   },
-  
+
   "custom/spotify": {
     "exec": "~/.config/waybar/scripts/mediaplayer.sh",
     "format": "{}",
@@ -82,7 +91,7 @@
     "tooltip": true,
     "signal": 8
   },
-  
+
   "custom/clock-workspace-toggle": {
     "format": "{}",
     "exec": "~/.config/waybar/scripts/toggle-clock-workspaces.sh",
@@ -124,7 +133,7 @@
     "separate-outputs": true,
     "max-length": 25
   },
-  
+
   "clock": {
     "format": "{:%H:%M}",
     "format-alt": "{:%A, %B %d, %Y}",
@@ -151,7 +160,7 @@
     },
     "interval": 1
   },
-  
+
   "pulseaudio": {
     "format": "{icon} {volume}%",
     "format-muted": "󰖁 Muted",
@@ -162,7 +171,7 @@
     "on-click-right": "pavucontrol",
     "tooltip": false
   },
-  
+
   "network": {
     "interval": 5,
     "format-wifi": "󰖩 {essid}",
@@ -171,7 +180,7 @@
     "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
     "on-click": "nm-connection-editor"
   },
-  
+
   "memory": {
     "interval": 5,
     "format": "󰍛 {}%",
@@ -182,7 +191,7 @@
       "critical": 90
     }
   },
-  
+
   "cpu": {
     "interval": 5,
     "format": "󰻠 {usage}%",
@@ -192,14 +201,14 @@
       "critical": 90
     }
   },
-  
+
   "disk": {
     "interval": 30,
     "format": "󰋊 {percentage_used}%",
     "path": "/home",
     "tooltip-format": "{used} used out of {total} on {path} ({percentage_used}%)"
   },
-  
+
   "battery": {
     "bat": "BAT0",
     "interval": 30,
@@ -212,7 +221,7 @@
     "format-plugged": "󰚥 {capacity}%",
     "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
   },
-  
+
   "custom/bluetooth": {
     "format": "{}",
     "exec": "~/.config/waybar/scripts/bluetooth-status.sh",
@@ -220,12 +229,12 @@
     "on-click": "blueman-manager",
     "interval": 2
   },
-  
+
   "tray": {
     "icon-size": 16,
     "spacing": 8
   },
-  
+
   "custom/powermenu": {
     "format": "󰐥",
     "on-click": "~/.config/waybar/scripts/powermenu.sh",

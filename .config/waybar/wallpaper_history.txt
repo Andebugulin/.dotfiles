@@ -1,10 +1,10 @@
-/home/andrei/Media/wallpapers/green.jpg
-/home/andrei/Media/wallpapers/stars.png
-/home/andrei/Media/wallpapers/hidden_dragon.jpg
-/home/andrei/Media/wallpapers/songs_of_silence.png
-/home/andrei/Media/wallpapers/dead-sea.jpg
-/home/andrei/Media/wallpapers/bird_in_the_lak.jpg
-/home/andrei/Media/wallpapers/DSC_1092.JPG
-/home/andrei/Media/wallpapers/old_pic.jpeg
-/home/andrei/Media/wallpapers/old-mill.jpg
-/home/andrei/Media/wallpapers/beautiful_place.png
+/home/andrei/Media/wallpapers/batman.png
+/home/andrei/Media/wallpapers/DSC_0111.JPG
+/home/andrei/Media/wallpapers/castle-far-away.jpg
+/home/andrei/Media/wallpapers/dark_green_japanise.png
+/home/andrei/Media/wallpapers/misty_mountains.jpg
+/home/andrei/Media/wallpapers/DSC_2965.JPG
+/home/andrei/Media/wallpapers/DSC_0424 - копия (2) — копия.JPG
+/home/andrei/Media/wallpapers/birds.jpg
+/home/andrei/Media/wallpapers/gollum.jpg
+/home/andrei/Media/wallpapers/ship.jpg
