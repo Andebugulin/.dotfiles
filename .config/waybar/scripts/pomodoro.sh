@@ -1,176 +1,201 @@
 #!/bin/bash
 
-# Determine which timer to use based on first argument
-TIMER_TYPE="${1:-short}"  # Default to short if no argument
+# Pomodoro timer for waybar - unified, with scrollable durations.
+# Usage:
+#   pomodoro.sh pomodoro [click|scroll-up|scroll-down]
+#   pomodoro.sh break    [click|scroll-up|scroll-down]
 
-# Path for storing pomodoro state
-POMODORO_STATE_DIR="$HOME/.cache/pomodoro"
-mkdir -p "$POMODORO_STATE_DIR"
+MODULE="${1:-pomodoro}"
+ACTION="${2:-update}"
 
-POMODORO_STATE_FILE="$POMODORO_STATE_DIR/pomodoro_state_$TIMER_TYPE"
-POMODORO_PID_FILE="$POMODORO_STATE_DIR/pomodoro_pid_$TIMER_TYPE"
+# --- Configuration ----------------------------------------------------------
 
-# Sound files - MP3 format
+STATE_DIR="$HOME/.cache/pomodoro"
+mkdir -p "$STATE_DIR"
+STATE_FILE="$STATE_DIR/state"
+LOCK_FILE="$STATE_DIR/transition.lock"
+
 WORK_COMPLETE_SOUND="/home/andrei/Media/sounds/complete-pomodoro.mp3"
 BREAK_COMPLETE_SOUND="/home/andrei/Media/sounds/back-to-work-pomodoro.mp3"
 
-# Timer configurations
-if [ "$TIMER_TYPE" = "short" ]; then
-    DEFAULT_WORK_TIME=25  # minutes
-    DEFAULT_BREAK_TIME=5  # minutes
-    TIMER_ICON="󱑖"
-    WORK_ICON="󱎫"
-    BREAK_ICON="󰭹"
-    TIMER_NAME="Short"
-elif [ "$TIMER_TYPE" = "long" ]; then
-    DEFAULT_WORK_TIME=40  # minutes
-    DEFAULT_BREAK_TIME=10  # minutes
-    TIMER_ICON="󰥔"
-    WORK_ICON="󱎬"
-    BREAK_ICON="󰭺"
-    TIMER_NAME="Long"
-else
-    echo "Invalid timer type: $TIMER_TYPE"
-    exit 1
-fi
+DEFAULT_WORK_TIME=25
+DEFAULT_BREAK_TIME=5
+MIN_WORK=1
+MAX_WORK=180   # 3 hours
+MIN_BREAK=1
+MAX_BREAK=60
 
-# Get current state or set default
-if [ -f "$POMODORO_STATE_FILE" ]; then
-  source "$POMODORO_STATE_FILE"
-else
-  # Initialize with defaults
-  echo "STATE=idle" > "$POMODORO_STATE_FILE"
-  echo "END_TIME=0" >> "$POMODORO_STATE_FILE"
-  echo "WORK_TIME=$DEFAULT_WORK_TIME" >> "$POMODORO_STATE_FILE"
-  echo "BREAK_TIME=$DEFAULT_BREAK_TIME" >> "$POMODORO_STATE_FILE"
-  source "$POMODORO_STATE_FILE"
-fi
+WORK_ICON="󱎫"
+BREAK_ICON="󰭹"
 
-# Function to play sound
+# --- State handling ---------------------------------------------------------
+
+if [ -f "$STATE_FILE" ]; then
+    # shellcheck disable=SC1090
+    source "$STATE_FILE"
+fi
+STATE=${STATE:-idle}
+END_TIME=${END_TIME:-0}
+WORK_TIME=${WORK_TIME:-$DEFAULT_WORK_TIME}
+BREAK_TIME=${BREAK_TIME:-$DEFAULT_BREAK_TIME}
+
+save_state() {
+    cat > "$STATE_FILE" <<EOF
+STATE=$STATE
+END_TIME=$END_TIME
+WORK_TIME=$WORK_TIME
+BREAK_TIME=$BREAK_TIME
+EOF
+}
+
+# --- Helpers ----------------------------------------------------------------
+
 play_sound() {
-  local sound_file=$1
-  if [ -f "$sound_file" ]; then
-    # Try mpv first (best MP3 support)
-    mpv "$sound_file" &>/dev/null || \
-    # Try mplayer as fallback
-    mplayer "$sound_file" &>/dev/null || \
-    # Try ffplay as another option
-    ffplay -nodisp -autoexit "$sound_file" &>/dev/null || \
-    # Last resort - try paplay but it might not work with MP3
-    paplay "$sound_file" &>/dev/null || \
-    # Terminal bell if everything fails
-    echo -e "\a"
-  else
-    # Sound file not found
-    notify-send "Pomodoro ($TIMER_NAME)" "Sound file not found: $sound_file" -i error
-    echo -e "\a" # Terminal bell
-  fi
+    local f=$1
+    [ -f "$f" ] || return
+    (mpv --no-terminal "$f" &>/dev/null ||
+     mplayer "$f" &>/dev/null ||
+     ffplay -nodisp -autoexit "$f" &>/dev/null ||
+     paplay "$f" &>/dev/null) &
 }
 
-# Function to format time remaining
-format_time_remaining() {
-  local seconds=$1
-  local minutes=$((seconds / 60))
-  local remaining_seconds=$((seconds % 60))
-  printf "%02d:%02d" $minutes $remaining_seconds
+format_time() {
+    local s=$1
+    printf "%02d:%02d" $((s / 60)) $((s % 60))
 }
 
-# Function to start a timer
-start_timer() {
-  local duration=$1  # in minutes
-  local state=$2
-  local end_time=$(($(date +%s) + duration * 60))
-  
-  # Save state
-  echo "STATE=$state" > "$POMODORO_STATE_FILE"
-  echo "END_TIME=$end_time" >> "$POMODORO_STATE_FILE"
-  echo "WORK_TIME=$WORK_TIME" >> "$POMODORO_STATE_FILE"
-  echo "BREAK_TIME=$BREAK_TIME" >> "$POMODORO_STATE_FILE"
-  
-  # Notify user
-  if [ "$state" = "working" ]; then
-    notify-send "Pomodoro ($TIMER_NAME)" "Work session started ($duration minutes)" -i clock
-  else
-    notify-send "Pomodoro ($TIMER_NAME)" "Break started ($duration minutes)" -i clock
-  fi
-}
-
-# Check if we need to switch states automatically
-check_timer() {
-  # If we're not idle and the timer is up
-  if [ "$STATE" != "idle" ] && [ $(date +%s) -ge $END_TIME ]; then
-    if [ "$STATE" = "working" ]; then
-      # Work time is over, start break
-      notify-send "Pomodoro ($TIMER_NAME)" "Work session finished! Take a break." -i clock
-      play_sound "$WORK_COMPLETE_SOUND"
-      start_timer $BREAK_TIME "break"
+adjust() {
+    local current=$1 dir=$2 min=$3 max=$4
+    if [ "$dir" = "up" ]; then
+        current=$((current + 1))
+        [ "$current" -gt "$max" ] && current=$max
     else
-      # Break time is over, go back to idle
-      notify-send "Pomodoro ($TIMER_NAME)" "Break finished! Ready for next session?" -i clock
-      play_sound "$BREAK_COMPLETE_SOUND"
-      echo "STATE=idle" > "$POMODORO_STATE_FILE"
-      echo "END_TIME=0" >> "$POMODORO_STATE_FILE"
-      echo "WORK_TIME=$WORK_TIME" >> "$POMODORO_STATE_FILE"
-      echo "BREAK_TIME=$BREAK_TIME" >> "$POMODORO_STATE_FILE"
+        current=$((current - 1))
+        [ "$current" -lt "$min" ] && current=$min
     fi
-  fi
+    echo "$current"
 }
 
-# Handle click action
-handle_click() {
-  case "$STATE" in
-    idle)
-      # Start work session
-      start_timer $WORK_TIME "working"
-      ;;
-    working)
-      # Cancel current session
-      echo "STATE=idle" > "$POMODORO_STATE_FILE"
-      echo "END_TIME=0" >> "$POMODORO_STATE_FILE"
-      echo "WORK_TIME=$WORK_TIME" >> "$POMODORO_STATE_FILE"
-      echo "BREAK_TIME=$BREAK_TIME" >> "$POMODORO_STATE_FILE"
-      notify-send "Pomodoro ($TIMER_NAME)" "Work session cancelled" -i clock
-      ;;
-    break)
-      # Cancel break
-      echo "STATE=idle" > "$POMODORO_STATE_FILE"
-      echo "END_TIME=0" >> "$POMODORO_STATE_FILE"
-      echo "WORK_TIME=$WORK_TIME" >> "$POMODORO_STATE_FILE"
-      echo "BREAK_TIME=$BREAK_TIME" >> "$POMODORO_STATE_FILE"
-      notify-send "Pomodoro ($TIMER_NAME)" "Break cancelled" -i clock
-      ;;
-  esac
+# Auto-transition states. Locked so two waybar polls can't double-fire.
+check_timer() {
+    (
+        flock -n 9 || exit 0
+        # Re-read state inside the lock to avoid races.
+        # shellcheck disable=SC1090
+        source "$STATE_FILE" 2>/dev/null
+        STATE=${STATE:-idle}
+        END_TIME=${END_TIME:-0}
+        WORK_TIME=${WORK_TIME:-$DEFAULT_WORK_TIME}
+        BREAK_TIME=${BREAK_TIME:-$DEFAULT_BREAK_TIME}
+
+        if [ "$STATE" != "idle" ] && [ "$(date +%s)" -ge "$END_TIME" ]; then
+            NOW=$(date +%s)
+            EXPIRED_BY=$((NOW - END_TIME))
+
+            if [ "$EXPIRED_BY" -gt 60 ]; then
+                # Stale state (e.g. after reboot) - silently reset.
+                STATE=idle
+                END_TIME=0
+            elif [ "$STATE" = "working" ]; then
+                notify-send "Pomodoro" "Work session done! Time for a break." -i clock
+                play_sound "$WORK_COMPLETE_SOUND"
+                STATE=break
+                END_TIME=$((NOW + BREAK_TIME * 60))
+            else
+                notify-send "Pomodoro" "Break over! Ready for the next session?" -i clock
+                play_sound "$BREAK_COMPLETE_SOUND"
+                STATE=idle
+                END_TIME=0
+            fi
+            save_state
+        fi
+    ) 9>"$LOCK_FILE"
+
+    # Reload latest state in caller scope.
+    # shellcheck disable=SC1090
+    source "$STATE_FILE" 2>/dev/null
+    STATE=${STATE:-idle}
+    END_TIME=${END_TIME:-0}
+    WORK_TIME=${WORK_TIME:-$DEFAULT_WORK_TIME}
+    BREAK_TIME=${BREAK_TIME:-$DEFAULT_BREAK_TIME}
 }
 
-# Check if we should handle a click
-if [ "$2" = "click" ]; then
-  handle_click
-  exit 0
-fi
+# --- Actions ----------------------------------------------------------------
 
-# Check if we need to update state
+case "$ACTION" in
+    click)
+        if [ "$MODULE" = "pomodoro" ]; then
+            case "$STATE" in
+                idle)
+                    STATE=working
+                    END_TIME=$(( $(date +%s) + WORK_TIME * 60 ))
+                    save_state
+                    notify-send "Pomodoro" "Work session started (${WORK_TIME} min)" -i clock
+                    ;;
+                working)
+                    STATE=idle
+                    END_TIME=0
+                    save_state
+                    notify-send "Pomodoro" "Work session cancelled" -i clock
+                    ;;
+                break)
+                    STATE=idle
+                    END_TIME=0
+                    save_state
+                    notify-send "Pomodoro" "Break skipped" -i clock
+                    ;;
+            esac
+        else
+            # Break module: click skips a running break.
+            if [ "$STATE" = "break" ]; then
+                STATE=idle
+                END_TIME=0
+                save_state
+                notify-send "Pomodoro" "Break skipped" -i clock
+            fi
+        fi
+        exit 0
+        ;;
+    scroll-up)
+        if [ "$MODULE" = "pomodoro" ]; then
+            WORK_TIME=$(adjust "$WORK_TIME" up "$MIN_WORK" "$MAX_WORK")
+        else
+            BREAK_TIME=$(adjust "$BREAK_TIME" up "$MIN_BREAK" "$MAX_BREAK")
+        fi
+        save_state
+        exit 0
+        ;;
+    scroll-down)
+        if [ "$MODULE" = "pomodoro" ]; then
+            WORK_TIME=$(adjust "$WORK_TIME" down "$MIN_WORK" "$MAX_WORK")
+        else
+            BREAK_TIME=$(adjust "$BREAK_TIME" down "$MIN_BREAK" "$MAX_BREAK")
+        fi
+        save_state
+        exit 0
+        ;;
+esac
+
+# --- Update path: check timer, then emit JSON for waybar -------------------
+
 check_timer
 
-# Calculate time remaining if not idle
-if [ "$STATE" != "idle" ]; then
-  time_remaining=$((END_TIME - $(date +%s)))
-  if [ $time_remaining -lt 0 ]; then
-    time_remaining=0
-  fi
-  time_display=$(format_time_remaining $time_remaining)
+if [ "$MODULE" = "pomodoro" ]; then
+    if [ "$STATE" = "working" ]; then
+        remaining=$(( END_TIME - $(date +%s) ))
+        [ "$remaining" -lt 0 ] && remaining=0
+        disp=$(format_time "$remaining")
+        echo "{\"text\":\"$WORK_ICON $disp\",\"class\":\"working\",\"tooltip\":\"Working — $disp remaining\\nClick to cancel\"}"
+    else
+        echo "{\"text\":\"$WORK_ICON ${WORK_TIME}m\",\"class\":\"idle\",\"tooltip\":\"Pomodoro: ${WORK_TIME} min\\nClick to start · Scroll to adjust (${MIN_WORK}–${MAX_WORK} min)\"}"
+    fi
 else
-  time_display="$TIMER_ICON"
+    if [ "$STATE" = "break" ]; then
+        remaining=$(( END_TIME - $(date +%s) ))
+        [ "$remaining" -lt 0 ] && remaining=0
+        disp=$(format_time "$remaining")
+        echo "{\"text\":\"$BREAK_ICON $disp\",\"class\":\"break\",\"tooltip\":\"Break — $disp remaining\\nClick to skip\"}"
+    else
+        echo "{\"text\":\"$BREAK_ICON ${BREAK_TIME}m\",\"class\":\"idle\",\"tooltip\":\"Break: ${BREAK_TIME} min\\nScroll to adjust (${MIN_BREAK}–${MAX_BREAK} min)\"}"
+    fi
 fi
-
-# Output for waybar
-case "$STATE" in
-  idle)
-    echo "{\"text\": \"$time_display\", \"class\": \"idle-$TIMER_TYPE\", \"tooltip\": \"$TIMER_NAME Pomodoro: Click to start ${WORK_TIME}min work session\"}"
-    ;;
-  working)
-    echo "{\"text\": \"$WORK_ICON $time_display\", \"class\": \"working-$TIMER_TYPE\", \"tooltip\": \"$TIMER_NAME Pomodoro - Working: $time_display remaining. Click to cancel.\"}"
-    ;;
-  break)
-    echo "{\"text\": \"$BREAK_ICON $time_display\", \"class\": \"break-$TIMER_TYPE\", \"tooltip\": \"$TIMER_NAME Pomodoro - Break: $time_display remaining. Click to skip.\"}"
-    ;;
-esac

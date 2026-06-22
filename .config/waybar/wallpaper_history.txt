@@ -1,10 +1,10 @@
-/home/andrei/Media/wallpapers/batman.png
-/home/andrei/Media/wallpapers/DSC_0111.JPG
-/home/andrei/Media/wallpapers/castle-far-away.jpg
-/home/andrei/Media/wallpapers/dark_green_japanise.png
-/home/andrei/Media/wallpapers/misty_mountains.jpg
-/home/andrei/Media/wallpapers/DSC_2965.JPG
 /home/andrei/Media/wallpapers/DSC_0424 - копия (2) — копия.JPG
-/home/andrei/Media/wallpapers/birds.jpg
+/home/andrei/Media/wallpapers/mountains.jpg
+/home/andrei/Media/wallpapers/nature_pong.jpg
+/home/andrei/Media/wallpapers/misty_mountains.jpg
+/home/andrei/Media/wallpapers/girl.jpg
+/home/andrei/Media/wallpapers/DSC_0111.JPG
+/home/andrei/Media/wallpapers/anakin.png
 /home/andrei/Media/wallpapers/gollum.jpg
-/home/andrei/Media/wallpapers/ship.jpg
+/home/andrei/Media/wallpapers/DSC_1092.JPG
+/home/andrei/Media/wallpapers/autumn.jpg

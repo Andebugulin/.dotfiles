@@ -5,6 +5,7 @@
 /home/andrei/Media/wallpapers/birds.jpg
 /home/andrei/Media/wallpapers/castle-far-away.jpg
 /home/andrei/Media/wallpapers/crazy.png
+/home/andrei/Media/wallpapers/crazy_sky_split.jpg
 /home/andrei/Media/wallpapers/dark_green_japanise.png
 /home/andrei/Media/wallpapers/dead-sea.jpg
 /home/andrei/Media/wallpapers/drth-wader.jpg
@@ -19,14 +20,20 @@
 /home/andrei/Media/wallpapers/DSC_1559.JPG
 /home/andrei/Media/wallpapers/DSC_2965.JPG
 /home/andrei/Media/wallpapers/DSC_2978.JPG
+/home/andrei/Media/wallpapers/ducks.jpg
+/home/andrei/Media/wallpapers/fallen_pilot.jpg
 /home/andrei/Media/wallpapers/girl.jpg
 /home/andrei/Media/wallpapers/gollum.jpg
 /home/andrei/Media/wallpapers/green_something.png
 /home/andrei/Media/wallpapers/hidden_dragon.jpg
 /home/andrei/Media/wallpapers/IMGP2951.JPG
+/home/andrei/Media/wallpapers/japan_underground.jpg
+/home/andrei/Media/wallpapers/lego_skeleton.jpg
 /home/andrei/Media/wallpapers/mario-gaming.jpg
 /home/andrei/Media/wallpapers/misty_mountains.jpg
+/home/andrei/Media/wallpapers/mountain.png
 /home/andrei/Media/wallpapers/mountains.jpg
+/home/andrei/Media/wallpapers/nature_pong.jpg
 /home/andrei/Media/wallpapers/nice_green_hourse.jpg
 /home/andrei/Media/wallpapers/old_pic.jpeg
 /home/andrei/Media/wallpapers/painting.jpeg
@@ -34,6 +41,7 @@
 /home/andrei/Media/wallpapers/sauron.png
 /home/andrei/Media/wallpapers/ship.jpg
 /home/andrei/Media/wallpapers/ship_painting.jpg
+/home/andrei/Media/wallpapers/sky.jpg
 /home/andrei/Media/wallpapers/small_knight.png
 /home/andrei/Media/wallpapers/songs_of_silence.png
 /home/andrei/Media/wallpapers/star_wars.png
@@ -44,5 +52,5 @@
 /home/andrei/Media/wallpapers/two_girls_lying.png
 /home/andrei/Media/wallpapers/wallhaven-coridor.jpg
 /home/andrei/Media/wallpapers/wallhaven-marvelous.jpg
-/home/andrei/Media/wallpapers/windows95.jpg
+/home/andrei/Media/wallpapers/waterfall.png
 /home/andrei/Media/wallpapers/winter_walk.jpg

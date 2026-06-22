@@ -381,7 +381,7 @@ tooltip label {
 }
 
 #custom-pomodoro.idle {
-  color: @blue;
+  color: @yellow;
 }
 
 #custom-pomodoro-short {
@@ -462,4 +462,28 @@ tooltip label {
 
 #custom-dunst-toggle.dnd-off {
   color: @sky;
+}
+
+#custom-pomodoro-break {
+  background: @surface0;
+  margin: 3px 0;
+  margin-left: 3px;
+  padding: 0 14px;
+  border-radius: 14px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+#custom-pomodoro-break:hover {
+  background: @surface1;
+  transition: all 0.3s ease;
+}
+
+#custom-pomodoro-break.idle {
+  color: @teal;
+}
+
+#custom-pomodoro-break.break {
+  color: @green;
 }

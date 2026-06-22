@@ -1,0 +1,13 @@
+# /etc/udev/rules.d/99-keychron-q2-kmonad.rules
+# Auto-start/stop kmonad for Keychron Q2 on plug/unplug
+#
+# Vendor: 0x3434, Product: 0x0113 (from evtest)
+#
+# Install:
+#   sudo cp 99-keychron-q2-kmonad.rules /etc/udev/rules.d/
+#   sudo udevadm control --reload-rules
+#
+# IMPORTANT: Replace YOUR_USERNAME below with your actual username
+
+ACTION=="add",    SUBSYSTEM=="input", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0113", ATTR{name}=="Keychron Keychron Q2", TAG+="systemd", RUN+="/usr/bin/su YOUR_USERNAME -c '/home/YOUR_USERNAME/.config/kmonad/kmonad-start.sh q2-plug'"
+ACTION=="remove", SUBSYSTEM=="input", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0113", RUN+="/usr/bin/su YOUR_USERNAME -c '/home/YOUR_USERNAME/.config/kmonad/kmonad-start.sh q2-unplug'"

@@ -18,8 +18,8 @@
   "modules-center": ["custom/clock-workspace-toggle"],
 
   "modules-right": [
-    "custom/pomodoro-short",
-    "custom/pomodoro-long",
+    "custom/pomodoro",
+    "custom/pomodoro-break",
     "custom/dunst-toggle",
     "network",
     "memory",
@@ -35,19 +35,23 @@
     "tooltip": false
   },
 
-  "custom/pomodoro-short": {
+  "custom/pomodoro": {
     "format": "{}",
-    "exec": "~/.config/waybar/scripts/pomodoro.sh short",
-    "on-click": "~/.config/waybar/scripts/pomodoro.sh short click",
+    "exec": "$HOME/.config/waybar/scripts/pomodoro.sh pomodoro",
+    "on-click": "$HOME/.config/waybar/scripts/pomodoro.sh pomodoro click",
+    "on-scroll-up": "$HOME/.config/waybar/scripts/pomodoro.sh pomodoro scroll-up",
+    "on-scroll-down": "$HOME/.config/waybar/scripts/pomodoro.sh pomodoro scroll-down",
     "return-type": "json",
     "interval": 1,
     "tooltip": true
   },
 
-  "custom/pomodoro-long": {
+  "custom/pomodoro-break": {
     "format": "{}",
-    "exec": "~/.config/waybar/scripts/pomodoro.sh long",
-    "on-click": "~/.config/waybar/scripts/pomodoro.sh long click",
+    "exec": "$HOME/.config/waybar/scripts/pomodoro.sh break",
+    "on-click": "$HOME/.config/waybar/scripts/pomodoro.sh break click",
+    "on-scroll-up": "$HOME/.config/waybar/scripts/pomodoro.sh break scroll-up",
+    "on-scroll-down": "$HOME/.config/waybar/scripts/pomodoro.sh break scroll-down",
     "return-type": "json",
     "interval": 1,
     "tooltip": true

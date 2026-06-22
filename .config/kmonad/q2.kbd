@@ -1,0 +1,79 @@
+(defcfg
+  input  (device-file "KMONAD_Q2_DEVICE")
+  output (uinput-sink "KMonad Q2")
+  fallthrough true
+)
+
+(defalias
+  sym  (tap-next esc (layer-toggle syms))
+  lalt (tap-hold-next-release 200 lalt (layer-toggle cursor))
+  fn   (layer-toggle fn)
+  brt  (layer-toggle bright)
+  lock   (layer-switch locked)
+  unlock (layer-switch base)
+
+  k M-S-A-k   h M-S-A-h   j M-S-A-j   l M-S-A-l
+  i M-S-A-i   q M-S-A-q   e C-b       f M-S-A-f
+  g M-S-A-g   r M-S-A-r   d M-S-A-d   u M-S-A-u
+  b M-S-A-b   p M-S-A-p   t M-S-A-t   m M-S-A-m
+  c M-S-A-c   z M-S-A-z
+  1 M-S-A-1   2 M-S-A-2   3 M-S-A-3   4 M-S-A-4
+  5 M-S-A-5   6 M-S-A-6   7 M-S-A-7   8 M-S-A-8
+  9 M-S-A-9
+)
+
+(defsrc
+  esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \      del
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret         home
+  lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft  up
+  lctl lmet lalt           spc           ralt ins  prnt  left down rght
+)
+
+(deflayer base
+  esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \      @brt
+  @sym a    s    d    f    g    h    j    k    l    ;    '    ret         @fn
+  lsft lsft z    x    c    v    b    n    m    ,    .    /    rsft  up
+  lctl lmet @lalt          spc           ralt del  prnt  left down rght
+)
+
+(deflayer fn
+  `    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  ins
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _      @lock
+  _    _    _    _    _    _    _    _    _    _    _    _    _           _
+  _    _    _    _    _    _    _    _    _    _    _    _    _     pgup
+  _    _    _              _              _    _    _    home  pgdn end
+)
+
+(deflayer bright
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _      _
+  _    _    _    _    _    _    previoussong  f5  f6  nextsong  _  _  _  _
+  _    _    _    _    _    _    _    mute _    _    _    _    _     _
+  _    _    _              playpause      _    _    _    _    _     _
+)
+
+(deflayer syms
+  _    @1   @2   @3   @4   @5   @6   @7   @8   @9    _    _    _    _
+  _    @q   _    @e   @r   @t   _    @u   @i   _    @p   _    _    _     _
+  _    _    _    @d   @f   @g   @h   @j   @k   @l   _    _    _          _
+  _    _    @z   _    @c   _    @b   _    @m   _    _    _    _     _
+  _    _    _              _              _    _    _    _    _     _
+)
+
+(deflayer cursor
+  A-esc A-1  A-2  A-3  A-4  A-5  A-6  A-7  A-8  A-9  A-0  A--  A-=  A-bspc
+  A-tab A-q  A-w  A-e  A-r  A-t  A-y  A-u  A-i  A-o  A-p  A-[  A-]  A-\     _
+  A-caps A-a A-s  A-d  A-f  A-g  left down up   rght A-;  A-'  A-ret          _
+  A-lsft A-lsft A-z A-x A-c A-v A-b  A-n  A-m  A-,  A-.  A-/  A-rsft A-up
+  A-lctl A-lmet lalt       A-spc          A-ralt A-del A-prnt A-left A-down A-rght
+)
+
+(deflayer locked
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX     XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX          @unlock
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX
+  XX   XX   XX             XX             XX   XX   XX   XX   XX    XX
+)

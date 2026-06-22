@@ -1,0 +1,148 @@
+;; ============================================================================
+;; KMonad config for Keychron Q2 (65%, Finnish layout)
+;; ============================================================================
+;; Verified keycodes:
+;;   Lightbulb  = KEY_DELETE  (code 111) → del  in defsrc
+;;   Hello      = KEY_HOME    (code 102) → home in defsrc
+;;   ScrollLock = KEY_RIGHTALT(code 100) → ralt in defsrc
+;;   Knob       = separate device (event15/17), not captured by kmonad
+;;
+;; Device: try /dev/input/event14 first, fallback to event18
+;; ============================================================================
+
+(defcfg
+  input  (device-file "/dev/input/event14")
+  output (uinput-sink "KMonad Q2")
+  fallthrough true
+)
+
+;; ============================================================================
+;; Aliases
+;; ============================================================================
+(defalias
+  ;; Core layers
+  sym  (tap-next esc (layer-toggle syms))
+  lalt (tap-hold-next-release 200 lalt (layer-toggle cursor))
+  fn   (layer-toggle fn)        ;; hello key (physical: right column bottom)
+  brt  (layer-toggle bright)    ;; lightbulb key (physical: right column top)
+  lock   (layer-switch locked)
+  unlock (layer-switch base)
+
+  ;; Hyprland shortcuts (Super+Shift+Alt)
+  k M-S-A-k   h M-S-A-h   j M-S-A-j   l M-S-A-l
+  i M-S-A-i   q M-S-A-q   e C-b       f M-S-A-f
+  g M-S-A-g   r M-S-A-r   d M-S-A-d   u M-S-A-u
+  b M-S-A-b   p M-S-A-p   t M-S-A-t   m M-S-A-m
+  c M-S-A-c   z M-S-A-z
+  1 M-S-A-1   2 M-S-A-2   3 M-S-A-3   4 M-S-A-4
+  5 M-S-A-5   6 M-S-A-6   7 M-S-A-7   8 M-S-A-8
+  9 M-S-A-9
+)
+
+;; ============================================================================
+;; Physical layout — Q2 65% (verified via evtest on event14)
+;; ============================================================================
+;; Row 1: esc 1-0 - = bspc           (knob is separate device)
+;; Row 2: tab q-] \ [lightbulb=del]
+;; Row 3: caps a-' ret [hello=home]
+;; Row 4: lsft 102d z-/ rsft up
+;; Row 5: lctl lmet lalt spc [scrolllock=ralt] ins prnt left down rght
+
+(defsrc
+  esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \      del
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret         home
+  lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft  up
+  lctl lmet lalt           spc           ralt ins  prnt  left down rght
+)
+
+;; ============================================================================
+;; Base layer
+;; ============================================================================
+;; caps      → tap=Esc, hold=Syms     (same as laptop)
+;; lalt      → tap=Alt, hold=Cursor   (same as laptop)
+;; 102d      → lsft                   (ISO key, natural shift extension)
+;; scrolllock→ ralt                   (passthrough, Finnish chars)
+;; ins       → del                    (nice spot for delete)
+;; lightbulb → brightness layer
+;; hello     → fn layer (F-keys)
+;; prnt      → prnt                   (hyprland handles screenshot)
+
+(deflayer base
+  esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \      @brt
+  @sym a    s    d    f    g    h    j    k    l    ;    '    ret         @fn
+  lsft lsft z    x    c    v    b    n    m    ,    .    /    rsft  up
+  lctl lmet @lalt          spc           ralt del  prnt  left down rght
+)
+
+;; ============================================================================
+;; Fn layer (hello held) — F-keys on number row + extra nav
+;; ============================================================================
+;; hello + 1=F1(mute) 2=F2(vol-) 3=F3(vol+) ... 0=F10
+;; hello + -=F11  +=F12
+;; hello + esc=`
+;; hello + bspc=ins (moved here since we stole its base position)
+;; hello + up=pgup  down=pgdn  left=home  right=end
+;; hello + lightbulb=lock
+
+(deflayer fn
+  `    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  ins
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _      @lock
+  _    _    _    _    _    _    _    _    _    _    _    _    _           _
+  _    _    _    _    _    _    _    _    _    _    _    _    _     pgup
+  _    _    _              _              _    _    _    home  pgdn end
+)
+
+;; ============================================================================
+;; Brightness layer (lightbulb held)
+;; ============================================================================
+;; lightbulb + j = brightness down (F5 → hyprland)
+;; lightbulb + k = brightness up   (F6 → hyprland)
+;; lightbulb + h = prev track      lightbulb + l = next track
+;; lightbulb + spc = play/pause
+;; lightbulb + m = mute
+
+(deflayer bright
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _      _
+  _    _    _    _    _    _    previoussong  f5  f6  nextsong  _  _  _  _
+  _    _    _    _    _    _    _    mute _    _    _    _    _     _
+  _    _    _              playpause      _    _    _    _    _     _
+)
+
+;; ============================================================================
+;; Syms layer (caps held) — Hyprland M-S-A shortcuts
+;; ============================================================================
+
+(deflayer syms
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    @q   _    @e   @r   @t   _    @u   @i   _    @p   _    _    _     _
+  _    _    _    @d   @f   @g   @h   @j   @k   @l   _    _    _          _
+  _    _    @z   _    @c   _    @b   _    @m   _    _    _    _     _
+  _    _    _              _              _    _    _    _    _     _
+)
+
+;; ============================================================================
+;; Cursor layer (alt held) — arrows on hjkl
+;; ============================================================================
+
+(deflayer cursor
+  A-esc A-1  A-2  A-3  A-4  A-5  A-6  A-7  A-8  A-9  A-0  A--  A-=  A-bspc
+  A-tab A-q  A-w  A-e  A-r  A-t  A-y  A-u  A-i  A-o  A-p  A-[  A-]  A-\     _
+  A-caps A-a A-s  A-d  A-f  A-g  left down up   rght A-;  A-'  A-ret          _
+  A-lsft A-lsft A-z A-x A-c A-v A-b  A-n  A-m  A-,  A-.  A-/  A-rsft A-up
+  A-lctl A-lmet lalt       A-spc          A-ralt A-del A-prnt A-left A-down A-rght
+)
+
+;; ============================================================================
+;; Locked layer — everything blocked, hello unlocks
+;; ============================================================================
+
+(deflayer locked
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX     XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX          @unlock
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX
+  XX   XX   XX             XX             XX   XX   XX   XX   XX    XX
+)
